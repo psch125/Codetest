@@ -1,3 +1,6 @@
+import torch
+
+
 # 모의고사
 def solution(answers):
     A = [1,2,3,4,5]
@@ -88,3 +91,94 @@ def solution(rows, columns, queries=None):
             
         minimum_value.append(min(rotate_array))
     return minimum_value
+
+
+# 거리두기
+def make_5X5(array):
+    boxx = []
+    for line in array:
+        line_box = []
+        for word in line:
+            line_box.append(word)
+        boxx.append(line_box)
+    return boxx
+
+def get_answer(bbox):
+    for i in range(len(bbox)):
+        for j in range(len(bbox[i])):
+            # P 일때 확인
+            if bbox[i][j] == 'P':
+                # print(f'bbox[i][j] : {bbox[i][j]}, i : {i}, j : {j}')
+                # 오른쪽의 경우
+                if j+1 <= 4:
+                    # print('오른쪽 공간 존재')
+                    if bbox[i][j+1] == 'P':
+                        return 0
+                    # 맨해튼 거리가 2일 때
+                    # 오른쪽 두 칸 확인
+                    if j+2 <= 4:
+                        if bbox[i][j+1] == 'O' and bbox[i][j+2] == 'P':
+                            return 0
+                    # 아래, 오른쪽 대각선 확인
+                    if i+1 <= 4:
+                        if bbox[i+1][j+1] == 'P':
+                            if bbox[i+1][j] == 'O' or bbox[i][j+1] == 'O':
+                                return 0         
+                # 아래의 경우
+                if i+1 <= 4:
+                    # print('아래쪽 공간 존재')
+                    if bbox[i+1][j] == 'P':
+                        return 0
+                    # 맨해튼 거리가 2
+                    # 아래 쪽 두칸 확인
+                    if i+2 <= 4:
+                        if bbox[i+1][j] == 'O' and bbox[i+2][j] == 'P':
+                            return 0
+                        
+                    # 아래 왼쪽 대각선 확인
+                    if j-1 >= 0:
+                        if bbox[i+1][j-1] == 'P':
+                            if bbox[i+1][j] == 'O' or bbox[i][j-1] == 'O':
+                                return 0
+                # 왼쪽의 경우            
+                if j-1 >= 0:
+                    # print('왼쪽 공간 존재')
+                    if bbox[i][j-1] == 'P':
+                        return 0
+                    # 맨해튼 거리가 2
+                    # 왼쪽 두칸 확인
+                    if j-2 >= 0:
+                        if bbox[i][j-1] == 'O' and bbox[i][j-2] == 'P':
+                            return 0
+                        
+                    # 위 왼쪽 대각선 확인
+                    if i-1 >= 0:
+                        if bbox[i-1][j-1] == 'P':
+                            if bbox[i][j-1] == 'O' or bbox[i-1][j] == 'O':
+                                return 0
+                # 위쪽의 경우
+                if i-1 >= 0:
+                    # print('위쪽 공간 존재')
+                    if bbox[i-1][j] == 'P':
+                        return 0
+                    # 맨해튼 거리가 2
+                    # 위쪽 두칸 확인
+                    if i-2 >= 0:
+                        if bbox[i-1][j] == 'O' and bbox[i-2][j] == 'P':
+                            return 0
+                        
+                    # 오른쪽 위 대각선 확인
+                    if j+1 <= 4:
+                        if bbox[i-1][j+1] == 'P':
+                            if bbox[i][j+1] == 'O' or bbox[i-1][j] == 'O':
+                                return 0           
+    return 1
+        
+def solution(places): 
+    answer = []
+    for event in places:
+        bbox = make_5X5(event)      
+        # print('-'* 150)
+        answer.append(get_answer(bbox))
+    # print(answer)
+    return answer
