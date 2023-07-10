@@ -182,3 +182,32 @@ def solution(places):
         answer.append(get_answer(bbox))
     # print(answer)
     return answer
+
+# 행렬곱
+import numpy as np 
+def solution(arr1, arr2):
+    answer = np.array(arr1) @ np.array(arr2)
+    return answer.tolist()
+
+# 시저 언어
+UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+LOWER = 'abcdefghijklmnopqrstuvwxyz'
+
+def solution(s, n):
+    answer = ''
+    for char in s:
+        location = 0
+        if char in UPPER:
+            location = UPPER.index(char) + n
+            if location > 25:
+                location = location - 26
+            answer += UPPER[location]
+                
+        elif char in LOWER:
+            location = LOWER.index(char) + n
+            if location > 25:
+                location = location - 26
+            answer += LOWER[location]    
+        else:
+            answer += char
+    return answer
